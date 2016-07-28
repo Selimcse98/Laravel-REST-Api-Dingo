@@ -651,3 +651,15 @@ select * from permissions;
 3	commander	Create commander	Create new commander	2016-07-27 17:58:44	2016-07-27 17:58:44
 4	read	read permission	description of reading permission	NULL	NULL
 
+=================================== relation values =================================
+permission_role:
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>Database relationship status</p>
+<img src="permission_role.png" alt="permission_role relations" style="width:128px;height:128px;">
+<img src="role_user.png" alt="permission_role relations" style="width:128px;height:128px;">
+</body>
+</html>
+

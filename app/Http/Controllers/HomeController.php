@@ -36,9 +36,16 @@ class HomeController extends Controller
     }
 
     public function getUserRole($userId)
-    {
+    {//http://localhost:8000/api/users/1/roles
         return App\User::find($userId)->roles;
-    }
+    }//$api->get('users/{user_id}/roles', 'App\Http\Controllers\HomeController@getUserRole');
+
+    public function getPermissions($roleParam)
+    {//$api->get('roles/{role}/permissions', 'App\Http\Controllers\HomeController@getPermissions');
+        $role = App\Role::where('name',$roleParam)->first();
+        //return $role->perms;
+        return $this->response->array($role->perms); //Dingo
+    }//http://localhost:8000/api/roles/owner/permissions
 
     public function create()
     {

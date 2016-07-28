@@ -1,3 +1,4 @@
+
 # Laravel PHP Framework
 
 [![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
@@ -27,6 +28,7 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
 
 ====================================//////////////////////////#################================================================
+
 locale: /Users/mohammadselimmiah/Sites/Api/ApiDingo
 https://tuts.codingo.me/dingo-api-quick-start
 https://www.youtube.com/watch?v=r40yAZAi6PQ&list=PLpvpznviFFFJUWlHylwipLLr1iLYs-cft
@@ -437,4 +439,215 @@ url: http://localhost:8000/api/role/permission/add
 curl -X POST -H "Content-Type: application/json" -d '{"role":"owner","permission":"create_invoice"}' http://localhost:8000/api/role/permission/add
 curl -X POST -H "Content-Type: application/json" -d '{"role":"manager","permission":"write"}' http://localhost:8000/api/role/permission/add
 
+public function getPermissions($roleParam)
+    {//$api->get('roles/{role}/permissions', 'App\Http\Controllers\HomeController@getPermissions');
+        $role = App\Role::where('name',$roleParam)->first();
+        return $role->perms;
+    }//http://localhost:8000/api/roles/owner/permissions
+
+$ curl --request GET http://localhost:8000/api/roles/owner/permissions
+
+{
+  "permissions": [
+    {
+      "id": 1,
+      "name": "create_invoice",
+      "display_name": "Create Invoices",
+      "description": "Create new invoices",
+      "created_at": "2016-07-27 17:58:44",
+      "updated_at": "2016-07-27 17:58:44",
+      "pivot": {
+        "role_id": 1,
+        "permission_id": 1
+      }
+    }
+  ]
+}
+
+$ curl --request GET http://localhost:8000/api/roles/manager/permissions
+
+{
+  "permissions": [
+    {
+      "id": 2,
+      "name": "write",
+      "display_name": "writing permission",
+      "description": "description of writing permission",
+      "created_at": null,
+      "updated_at": null,
+      "pivot": {
+        "role_id": 2,
+        "permission_id": 2
+      }
+    }
+  ]
+}
+
+==================================================================================================================
+curl -X POST -H "Content-Type: application/json" -d '{"role":"manager","permission":"write"}' http://localhost:8000/api/role/permission/add
+curl -X POST -H "Content-Type: application/json" -d '{"role":"manager","permission":"create_invoice"}' http://localhost:8000/api/role/permission/add
+curl -X POST -H "Content-Type: application/json" -d '{"role":"manager","permission":"commander"}' http://localhost:8000/api/role/permission/add
+curl -X POST -H "Content-Type: application/json" -d '{"role":"manager","permission":"read"}' http://localhost:8000/api/role/permission/add
+
+curl --request GET http://localhost:8000/api/roles/manager/permissions
+
+{
+  "permissions": [
+    {
+      "id": 1,
+      "name": "create_invoice",
+      "display_name": "Create Invoices",
+      "description": "Create new invoices",
+      "created_at": "2016-07-27 17:58:44",
+      "updated_at": "2016-07-27 17:58:44",
+      "pivot": {
+        "role_id": 2,
+        "permission_id": 1
+      }
+    },
+    {
+      "id": 2,
+      "name": "write",
+      "display_name": "writing permission",
+      "description": "description of writing permission",
+      "created_at": null,
+      "updated_at": null,
+      "pivot": {
+        "role_id": 2,
+        "permission_id": 2
+      }
+    },
+    {
+      "id": 2,
+      "name": "write",
+      "display_name": "writing permission",
+      "description": "description of writing permission",
+      "created_at": null,
+      "updated_at": null,
+      "pivot": {
+        "role_id": 2,
+        "permission_id": 2
+      }
+    },
+    {
+      "id": 3,
+      "name": "commander",
+      "display_name": "Create commander",
+      "description": "Create new commander",
+      "created_at": "2016-07-27 17:58:44",
+      "updated_at": "2016-07-27 17:58:44",
+      "pivot": {
+        "role_id": 2,
+        "permission_id": 3
+      }
+    },
+    {
+      "id": 4,
+      "name": "read",
+      "display_name": "read permission",
+      "description": "description of reading permission",
+      "created_at": null,
+      "updated_at": null,
+      "pivot": {
+        "role_id": 2,
+        "permission_id": 4
+      }
+    }
+  ]
+}
+
+==================================================== Database ====================================================
+show create table users;
+
+CREATE TABLE `users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `remember_token` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `users_email_unique` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+show create table roles;
+
+CREATE TABLE `roles` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `display_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `roles_name_unique` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+show create table role_user;
+//this database is populated by GET commands
+$ curl --request GET http://localhost:8000/api/users/3/roles/owner
+{"user":{"id":3,"name":"wahida moon","email":"wahida.doe@gmail.com","created_at":"2016-07-27 17:57:23","updated_at":"2016-07-27 17:57:23"}}
+
+$ curl --request GET http://localhost:8000/api/users/2/roles/owner
+{"user":{"id":2,"name":"John Doe","email":"john.doe@gmail.com","created_at":"2016-07-27 17:57:23","updated_at":"2016-07-27 17:57:23"}}
+
+$ curl --request GET http://localhost:8000/api/users/1/roles/owner
+{"user":{"id":1,"name":"John1 Doe1","email":"john.doe1@gmail.com","created_at":"2016-07-27 17:57:23","updated_at":"2016-07-27 17:57:23"}}
+
+$ curl --request GET http://localhost:8000/api/users/1/roles/owner
+$ curl --request GET http://localhost:8000/api/users/1/roles/manager
+$ curl --request GET http://localhost:8000/api/users/1/roles/driver
+
+so, user 1 has 3 roles
+$ curl --request GET http://localhost:8000/api/users/1/roles
+will show all the roles associated with user 1
+
+CREATE TABLE `role_user` (
+  `user_id` int(10) unsigned NOT NULL,
+  `role_id` int(10) unsigned NOT NULL,
+  KEY `role_user_user_id_foreign` (`user_id`),
+  KEY `role_user_role_id_foreign` (`role_id`),
+  CONSTRAINT `role_user_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `role_user_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+show create table permissions;
+CREATE TABLE `permissions` (
+  `id` int(11) unsigned NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `display_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+show create table permission_role;
+CREATE TABLE `permission_role` (
+  `permission_id` int(11) unsigned NOT NULL,
+  `role_id` int(11) unsigned NOT NULL,
+  KEY `permission_role_id_fk` (`permission_id`),
+  KEY `permission_role_fk` (`role_id`),
+  CONSTRAINT `permission_role_fk` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `permission_role_id_fk` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+=================================== database values =================================
+select * from users;
+
+1	John1 Doe1	john.doe1@gmail.com	$2y$10$Qg3atB.5oavbEN79Mr20J.XgleiYw3jcPFHvVfYhrAZ1IcHmkSZze	NULL	2016-07-27 17:57:23	2016-07-27 17:57:23
+2	John Doe	john.doe@gmail.com	$2y$10$Qg3atB.5oavbEN79Mr20J.XgleiYw3jcPFHvVfYhrAZ1IcHmkSZze	NULL	2016-07-27 17:57:23	2016-07-27 17:57:23
+3	wahida moon	wahida.doe@gmail.com	$2y$10$Qg3atB.5oavbEN79Mr20J.XgleiYw3jcPFHvVfYhrAZ1IcHmkSZze	NULL	2016-07-27 17:57:23	2016-07-27 17:57:23
+
+select * from roles;
+1	owner	This is Owner	Owners description	NULL	NULL
+2	manager	This is Manager	Description of Manager	NULL	NULL
+3	driver	This is driver	Driver description	NULL	NULL
+
+select * from permissions;
+1	create_invoice	Create Invoices	Create new invoices	2016-07-27 17:58:44	2016-07-27 17:58:44
+2	write	writing permission	description of writing permission	NULL	NULL
+3	commander	Create commander	Create new commander	2016-07-27 17:58:44	2016-07-27 17:58:44
+4	read	read permission	description of reading permission	NULL	NULL
 

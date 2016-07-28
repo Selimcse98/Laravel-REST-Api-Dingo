@@ -654,10 +654,10 @@ select * from permissions;
 =================================== relation values =================================
 permission_role:
 
-<!DOCTYPE html>
+
 <html>
 <body>
-<p>Database relationship status</p>
+<h2>============================= Database relationship status =============================</h2>
 <img src="permission_role.png" alt="permission_role relations" style="width:128px;height:128px;">
 <img src="role_user.png" alt="permission_role relations" style="width:128px;height:128px;">
 </body>

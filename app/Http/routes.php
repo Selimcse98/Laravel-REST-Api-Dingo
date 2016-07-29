@@ -31,6 +31,7 @@ $api->version('v1', function ($api) {
     $api->get('users/{user_id}/roles', 'App\Http\Controllers\HomeController@getUserRole');
     $api->post('role/permission/add', 'App\Http\Controllers\HomeController@attachPermission');
     $api->get('roles/{role}/permissions', 'App\Http\Controllers\HomeController@getPermissions');
+    $api->post('authenticate','App\Http\Controllers\Auth\AuthController@authenticate');
+    $api->post('authenticate1','App\Http\Controllers\Auth\AuthController@authenticate1');
 
-    $api->post('user/role/add', 'App\Http\Controllers\HomeController@attachPermission');
 });

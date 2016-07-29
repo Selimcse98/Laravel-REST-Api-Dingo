@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
+//use App\Http\Requests\Request;
+use Illuminate\Http\Response;
+use Illuminate\Http\Request;
+use Tymon\JWTAuth\Exceptions\JWTException;
 use App\User;
-use Validator;
+use Tymon\JWTAuth\Facades\JWTAuth;
+//use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
@@ -53,6 +58,32 @@ class AuthController extends Controller
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:6|confirmed',
         ]);
+    }
+
+    public function authenticate1(Request $request)
+    {
+        $credentials = $request->only('email','password');
+        try {
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return $this->response->errorUnauthorized();
+            }
+        }catch (JWTException $ex){
+            return $this->response->errorInternal();
+        }
+        return $this->response->array(compact('token'))->setStatusCode('200');
+    }
+
+    public function authenticate(Request $request)
+    {
+        $credentials = $request->only('email','password');
+        try {
+            if (!($token = JWTAuth::attempt($credentials))) {
+                return response()->json(['error' => 'User Credentials are not correct'], 401);
+            }
+        }catch (JWTException $ex){
+            return response()->json(['error' => 'Something went wrong'], 500);
+        }
+        return response()->json(compact('token'));
     }
 
     /**

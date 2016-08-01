@@ -26,7 +26,7 @@ class AuthController extends Controller
     |
     */
 
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+    //use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
     /**
      * Where to redirect users after login / registration.
@@ -40,10 +40,10 @@ class AuthController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
-    }
+//    public function __construct()
+//    {
+//        $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
+//    }
 
     /**
      * Get a validator for an incoming registration request.
@@ -51,14 +51,14 @@ class AuthController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
-        ]);
-    }
+//    protected function validator(array $data)
+//    {
+//        return Validator::make($data, [
+//            'name' => 'required|max:255',
+//            'email' => 'required|email|max:255|unique:users',
+//            'password' => 'required|min:6|confirmed',
+//        ]);
+//    }
 
     public function authenticate1(Request $request)
     {
@@ -76,6 +76,7 @@ class AuthController extends Controller
     public function authenticate(Request $request)
     {
         $credentials = $request->only('email','password');
+        //$credentials = $request::only('email','password');
         try {
             if (!($token = JWTAuth::attempt($credentials))) {
                 return response()->json(['error' => 'User Credentials are not correct'], 401);
@@ -99,5 +100,15 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    public function index()
+    {
+        return User::all();
+    }
+
+    public function showUser($id)
+    {
+        return User::where('id',$id)->first(); //return User::find($id);
     }
 }

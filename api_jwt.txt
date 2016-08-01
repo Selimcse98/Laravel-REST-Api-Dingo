@@ -88,4 +88,3 @@ $ curl -X POST -H "Content-Type: application/json" -d '{"email":"john.doe1@gmail
         return $this->response->array(compact('token'))->setStatusCode('200');
     }
 
-    

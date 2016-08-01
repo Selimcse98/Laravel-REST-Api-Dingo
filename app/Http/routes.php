@@ -34,4 +34,10 @@ $api->version('v1', function ($api) {
     $api->post('authenticate','App\Http\Controllers\Auth\AuthController@authenticate');
     $api->post('authenticate1','App\Http\Controllers\Auth\AuthController@authenticate1');
 
+
+});
+
+$api->version('v1', ['middleware'=>'api.auth'], function ($api) {
+    $api->get('users', 'App\Http\Controllers\HomeController@index');
+    $api->get('users/{id}', 'App\Http\Controllers\Auth\AuthController@showUser');
 });
